@@ -66,6 +66,7 @@
             this.load.crossOrigin = 'anonymous';
 
             this.load.image('dot', 'assets/kerasi.png');
+	    this.load.image('coin', 'assets/coin.JPEG');
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('pacman', 'assets/popeyechar.jpg', 32, 32);
             this.load.tilemap('map', 'assets/pacman-map.json', null, Phaser.Tilemap.TILED_JSON);
@@ -83,12 +84,18 @@
             this.layer = this.map.createLayer('Pacman');
 
             this.dots = this.add.physicsGroup();
+	    this.coins = this.add.physicsGroup();
+            this.coins.enableBody = true;
 
             this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
 
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
+	     
+	    var repeat =0;
+            this.time.events.add(5000+(repeat*10000), this.addCoin, this);
+             repeat++;
 
             //  Pacman should collide with everything except the safe tile
             this.map.setCollisionByExclusion([this.safetile], true, this.layer);
@@ -240,11 +247,40 @@
             }
 
         },
+   
+	eatCoin: function (pacman, coin) {
+                    coin.kill();
+                    this.score += 50;
+                    this.scoreText.text = 'Score: ' + this.score;
 
+                },
+                addCoin: function () {
+                    
+                            var side = this.rnd.between(0, 1);
+                            if (side === 0) {
+                                this.coin = this.coins.create(382, this.rnd.between(65, 365), 'coin');
+                                this.coin.visible =true;
+                                this.time.events.add(7000, this.removeCoin, this);
+                            } else {
+                                this.coin = this.coins.create(45, this.rnd.between(65, 365), 'coin');
+                                this.coin.visible= true;
+                                this.time.events.add(7000, this.removeCoin, this);
+                            }
+                            
+                    
+
+                },
+
+                removeCoin: function () {
+                    this.coin.visible = false;
+                    this.time.events.add(7000, this.addCoin, this);
+                },
         update: function () {
           
             this.physics.arcade.collide(this.pacman, this.layer);
+	    this.physics.arcade.collide(this.coins, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
+	    this.physics.arcade.overlap(this.pacman, this.coins, this.eatCoin, null, this);
 
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
