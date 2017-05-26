@@ -109,7 +109,7 @@
             this.pacman.body.setSize(16, 16, 0, 0);
 
             this.cursors = this.input.keyboard.createCursorKeys();
-	    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#f0f8ff' });
+	     this.scoreText = game.add.text(0, 500, 'Score: 0', {fontSize: '32px', fill: 'red'});
 		popeyeText = game.add.text(300, 16, 'popeye: 3', { fontSize: '32px', fill: '#f0f8ff' });
             this.pacman.play('munch');
             this.move(Phaser.LEFT);
