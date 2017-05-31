@@ -66,7 +66,6 @@
             this.load.crossOrigin = 'anonymous';
 
             this.load.image('dot', 'assets/kerasi.png');
-	    this.load.image('coin', 'assets/coin.JPEG');
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('pacman', 'assets/popeyechar.jpg', 32, 32);
             this.load.tilemap('map', 'assets/pacman-map.json', null, Phaser.Tilemap.TILED_JSON);
@@ -84,8 +83,7 @@
             this.layer = this.map.createLayer('Pacman');
 
             this.dots = this.add.physicsGroup();
-	    this.coins = this.add.physicsGroup();
-            this.coins.enableBody = true;
+	    
 
             this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
 
@@ -238,8 +236,8 @@
         eatDot: function (pacman, dot) {
 
             dot.kill();
-		score += 10;
-    scoreText.text = 'Score: ' + score;
+		this.score += 10;
+    this.scoreText.text = 'Score: ' + score;
 
             if (this.dots.total === 0)
             {
