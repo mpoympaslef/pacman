@@ -71,7 +71,8 @@
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('pacman', 'assets/popeyechar.jpg', 32, 32);
             this.load.tilemap('map', 'assets/pacman-map.json', null, Phaser.Tilemap.TILED_JSON);
-		this.load.audio('pac', ['assets/Mortal Kombat SONG.mp3', 'assets/Mortal Kombat SONG.ogg']);
+	    this.load.image('lira', 'assets/lira.jpg');
+	    this.load.audio('pac', ['assets/Mortal Kombat SONG.mp3', 'assets/Mortal Kombat SONG.ogg']);
 
             //  Needless to say, graphics (C)opyright Namco
 
@@ -85,14 +86,17 @@
             this.layer = this.map.createLayer('Pacman');
 
             this.dots = this.add.physicsGroup();
-	    
+	    this.lira=this.add.physicsGroup();
 
             this.map.createFromTiles(7, this.safetile, 'dot', this.layer, this.dots);
+	    this.map.createFromTiles(35, this.safetile, 'lira', this.layer, this.lira);
 
             //  The dots will need to be offset by 6px to put them back in the middle of the grid
             this.dots.setAll('x', 6, false, false, 1);
             this.dots.setAll('y', 6, false, false, 1);
 	     
+	    this.lira.setAll('x', 6, false, false, 1);
+            this.lira.setAll('y', 6, false, false, 1);
 	    
 
             
@@ -245,14 +249,27 @@
         },
    
 	
-
+  eatLira: function(pacman,lira){
+		     
+            lira.kill();
+		     
+	    this.bonus+=100;
+            this.score+=100;
+            this.bonusText.text= 'Bonus: '+ this.bonus;
+            this.scoreText.text= 'Score: ' + this.bonus;
+            
+	   
+            if(this.dots.total===0)
+            {
+                this.dots.callAll('revive');
+            }
+        },
                 
         update: function () {
           
             this.physics.arcade.collide(this.pacman, this.layer);
-	    this.physics.arcade.collide(this.coins, this.layer);
             this.physics.arcade.overlap(this.pacman, this.dots, this.eatDot, null, this);
-	    this.physics.arcade.overlap(this.pacman, this.coins, this.eatCoin, null, this);
+	    this.physics.arcade.overlap(this.pacman, this.lira, this.eatLira, null, this);
 
             this.marker.x = this.math.snapToFloor(Math.floor(this.pacman.x), this.gridsize) / this.gridsize;
             this.marker.y = this.math.snapToFloor(Math.floor(this.pacman.y), this.gridsize) / this.gridsize;
