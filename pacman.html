@@ -13,7 +13,11 @@
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
 </head>
 <body>
+<audio autoplay loop>
 
+            <source src="assets/Mortal Kombat SONG.mp3" type="audio/mp3">
+
+        </audio>
     <script type="text/javascript">
 
     var game = new Phaser.Game(448, 496, Phaser.AUTO);
@@ -67,7 +71,7 @@
             this.load.image('tiles', 'assets/pacman-tiles.png');
             this.load.spritesheet('pacman', 'assets/popeyechar.jpg', 32, 32);
             this.load.tilemap('map', 'assets/pacman-map.json', null, Phaser.Tilemap.TILED_JSON);
-		this.load.audio('pac', ['assets/sound_pac.mp3', 'assets/sound_pac.ogg']);
+		this.load.audio('pac', ['assets/Mortal Kombat SONG.mp3', 'assets/Mortal Kombat SONG.ogg']);
 
             //  Needless to say, graphics (C)opyright Namco
 
